@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mysql:
+    image: kidshealth-mysql
+    build: 
+      context: .
+      dockerfile: ./mysql-Dockerfile
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "3306:3306"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  web:
+    image: tomcat
+    ports: 
+      - "8080:8080"
+    env_file:
+     - ./example.env
+    volumes:
+      - ../target/kidshealth.war:/usr/local/tomcat/webapps/kidshealth.war
+      - ../target/kidshealth:/usr/local/tomcat/webapps/kidshealth
+    depends_on:
+      - mysql

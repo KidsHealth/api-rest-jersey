@@ -13,7 +13,7 @@ public class DefaultController {
 	@GET
 	@Path("/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getActorById(@PathParam("name") final String name) {
+	public Response greet(@PathParam("name") final String name) {
 		return Response.ok("Hello, " + name).build();
 	}
 }
