@@ -27,7 +27,7 @@
 	<dependency>
 		<groupId>com.github.KidsHealth</groupId>
 		<artifactId>core</artifactId>
-		<version>v0.1.1</version>
+		<version>407758970332a07dfbfef67c70b66cc1b3e33be1</version>
 	</dependency>
     <dependency>
       <groupId>junit</groupId>

@@ -22,11 +22,11 @@ public class MySQLEventRepository implements EventRepository {
 
 	protected final static String EVENT_TABLE = "Event";
 	protected final static String NEXT_ID = String.format("select max(id) + 1 as NEXT_ID from %s;", EVENT_TABLE);
-	protected final static String INSERT = String.format("INSERT INTO %s VALUES (?,?,?,?,?);", EVENT_TABLE);
+	protected final static String INSERT = String.format("INSERT INTO %s VALUES (?,?,?,?,?,?,?,?);", EVENT_TABLE);
 	protected final static String DELETE = String.format("DELETE FROM %s WHERE id = ?;", EVENT_TABLE);
 	protected final static String SELECT_OF_ID = String.format("SELECT * FROM %s WHERE id = ?;", EVENT_TABLE);
 	protected final static String SELECT_OF_APPOINTMENTID = String
-			.format("SELECT * FROM %s WHERE description = '?' AND topic = 'Appointments';", EVENT_TABLE);
+			.format("SELECT * FROM %s WHERE description = ? AND topic = 'Appointments';", EVENT_TABLE);
 
 	private Connection connection;
 
@@ -100,7 +100,9 @@ public class MySQLEventRepository implements EventRepository {
 		) {
 			statement.setInt(1, anId.value());
 			ResultSet result = statement.executeQuery();
-			result.next();
+			if(!result.next()) {
+				return null;
+			}
 			
 			event = buildEvent(result);
 			
@@ -121,7 +123,7 @@ public class MySQLEventRepository implements EventRepository {
 		EventTopic c = new EventTopic(result.getString(7));
 		PatientId p = new PatientId(result.getInt(8));
 
-		event = new Event(i, t, d, c, v,start,end);
+		event = new Event(i, t, d, v, c,start,end,p);
 		event.patientId(p);
 		return event;
 	}
@@ -134,7 +136,9 @@ public class MySQLEventRepository implements EventRepository {
 		) {
 			statement.setInt(1, appointmentId.value());
 			ResultSet result = statement.executeQuery();
-			result.next();
+			if(!result.next()) {
+				return null;
+			}
 			
 			event = buildEvent(result);
 			

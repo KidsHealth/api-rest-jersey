@@ -22,6 +22,7 @@ public class MySQLDiseaseContractionRepository implements DiseaseContractionRepo
 	protected final static String NEXT_ID = String.format("select max(id) + 1 as NEXT_ID from %s;", DISEASECONTRACTION_TABLE);
 	protected final static String INSERT = String.format("INSERT INTO %s VALUES (?,?,?,?,?);", DISEASECONTRACTION_TABLE);
 	protected final static String SELECT_OF_ID = String.format("SELECT * FROM %s WHERE id = ?;", DISEASECONTRACTION_TABLE);
+	protected final static String SELECT_OF_PATIENTID = String.format("SELECT * FROM %s WHERE Patient_id = ?;", DISEASECONTRACTION_TABLE);
 
 	private Connection connection;
 	
@@ -86,7 +87,9 @@ public class MySQLDiseaseContractionRepository implements DiseaseContractionRepo
 		) {
 			statement.setInt(1, anId.value());
 			ResultSet result = statement.executeQuery();
-			result.next();
+			if(!result.next()) {
+				return null;
+			}
 			
 			diseaseContraction = buildDiseaseContraction(result);
 			
@@ -109,7 +112,7 @@ public class MySQLDiseaseContractionRepository implements DiseaseContractionRepo
 	public Collection<DiseaseContraction> ofPatient(PatientId patientId) {
 		Collection<DiseaseContraction> diseaseContractions = new ArrayList<>();
 		try (
-			PreparedStatement statement = connection.prepareStatement(SELECT_OF_ID);
+			PreparedStatement statement = connection.prepareStatement(SELECT_OF_PATIENTID);
 		) {
 			statement.setInt(1, patientId.value());
 			ResultSet result = statement.executeQuery();
