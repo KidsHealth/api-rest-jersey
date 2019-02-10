@@ -92,7 +92,9 @@ public class MySQLMedicationRepository implements MedicationRepository {
 		) {
 			statement.setInt(1, anId.value());
 			ResultSet result = statement.executeQuery();
-			result.next();
+			if(!result.next()) {
+				return null;
+			}
 			
 			medication = buildMedication(result);
 			
@@ -122,7 +124,6 @@ public class MySQLMedicationRepository implements MedicationRepository {
 		) {
 			statement.setInt(1, id.value());
 			ResultSet result = statement.executeQuery();
-			result.next();
 			
 			while (result.next()) {
 				medications.add(buildMedication(result));

@@ -63,7 +63,9 @@ public class MySQLUserRepository implements UserRepository {
 			statement.setInt(1, anId.value());
 			ResultSet result = statement.executeQuery();
 			
-			result.next();
+			if(!result.next()) {
+				return null;
+			}
 			
 			result.getInt("doctor_id");
 			if (result.wasNull()) {

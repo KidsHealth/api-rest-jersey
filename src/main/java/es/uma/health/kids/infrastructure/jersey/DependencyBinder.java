@@ -6,9 +6,11 @@ import java.sql.SQLException;
 
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 
+import es.uma.health.kids.application.dto.diseasecontraction.DetailedDiseaseContractionMapper;
 import es.uma.health.kids.application.dto.diseasecontraction.DiseaseContractionMapper;
 import es.uma.health.kids.application.dto.medication.MedicationMapper;
 import es.uma.health.kids.application.dto.message.MessageMapper;
+import es.uma.health.kids.application.dto.patient.DetailedPatientMapper;
 import es.uma.health.kids.application.dto.patient.PatientMapper;
 import es.uma.health.kids.domain.model.diseasecontraction.DiseaseContractionRepository;
 import es.uma.health.kids.domain.model.event.EventRepository;
@@ -27,11 +29,11 @@ public class DependencyBinder extends AbstractBinder {
 
 	@Override
 	protected void configure() {
-		System.out.println("Loading binder...");
+		System.err.println("Loading binder...");
 		
-		System.out.println(System.getenv("KIDSHEALTH_DB_URL"));
-		System.out.println(System.getenv("KIDSHEALTH_DB_USER"));
-		System.out.println(System.getenv("KIDSHEALTH_DB_PASS"));
+		System.err.println(System.getenv("KIDSHEALTH_DB_URL"));
+		System.err.println(System.getenv("KIDSHEALTH_DB_USER"));
+		System.err.println(System.getenv("KIDSHEALTH_DB_PASS"));
 		
 		Connection connection;
 		try {
@@ -63,6 +65,9 @@ public class DependencyBinder extends AbstractBinder {
 		bindAsContract(MedicationMapper.class);
 		bindAsContract(MessageMapper.class);
 		bindAsContract(PatientMapper.class);
+		bindAsContract(DetailedDiseaseContractionMapper.class);
+		bindAsContract(DetailedPatientMapper.class);
+
 	}
 
 }

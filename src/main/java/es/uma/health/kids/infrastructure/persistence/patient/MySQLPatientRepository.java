@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 import es.uma.health.kids.domain.model.patient.Patient;
 import es.uma.health.kids.domain.model.patient.PatientFullName;
@@ -20,13 +21,13 @@ public class MySQLPatientRepository implements PatientRepository {
 
 	protected final static String PATIENT_TABLE = "Patient";
 	protected final static String NEXT_ID = String.format("select max(id) + 1 as NEXT_ID from %s;", PATIENT_TABLE);
-	protected final static String INSERT = String.format("INSERT INTO %s VALUES (?, ?, ?, ?, ?);", PATIENT_TABLE);
-	protected final static String UPDATE = String.format("UPDATE %s name = ?, surname = ?,"
-			+ "birthdate = ?, Doctor_User_id = ? WHERE id=?;", PATIENT_TABLE);
+	protected final static String INSERT = String.format("INSERT INTO %s VALUES (?, ?, ?, ?, ?, ?);", PATIENT_TABLE);
+	protected final static String UPDATE = String.format("UPDATE %s SET name = ?, surname = ?, "
+			+ "birthdate = ?, Doctor_User_id = ? WHERE id = ?;", PATIENT_TABLE);
 	protected final static String DELETE = String.format("DELETE FROM %s WHERE id = ?;", PATIENT_TABLE);
 	protected final static String SELECT_OF_ID = String.format("SELECT * FROM %s WHERE id = ?;", PATIENT_TABLE);
-	protected final static String SELECT_OF_RESPONSIBLEID = String.format("SELECT * FROM %s WHERE Doctor_User_id = ?;", PATIENT_TABLE);
-	protected final static String SELECT_OF_DOCTORID = String.format("SELECT * FROM %s WHERE PatientResponsible_User_id = ?;", PATIENT_TABLE);
+	protected final static String SELECT_OF_RESPONSIBLEID = String.format("SELECT * FROM %s WHERE PatientResponsible_User_id = ?;", PATIENT_TABLE);
+	protected final static String SELECT_OF_DOCTORID = String.format("SELECT * FROM %s WHERE Doctor_User_id = ?;", PATIENT_TABLE);
 	protected final static String SELECT_RELATED_WITH = String.format("SELECT * FROM %s WHERE PatientResponsible_User_id = ? OR Doctor_User_id = ?;", PATIENT_TABLE);
 
 	private Connection connection;
@@ -60,6 +61,8 @@ public class MySQLPatientRepository implements PatientRepository {
 			st.setString(3, aPatient.fullName().surname());			
 			st.setDate(4, Date.valueOf(aPatient.birthdate()));
 			st.setInt(5, aPatient.patientResponsibleId().value());
+			st.setObject(6, Optional.ofNullable(
+					aPatient.doctorId()).map(i -> i.value()).orElse(null), java.sql.Types.INTEGER);
 			st.execute();
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -74,7 +77,11 @@ public class MySQLPatientRepository implements PatientRepository {
 			statement.setString(1, aPatient.fullName().name());
 			statement.setString(2, aPatient.fullName().surname());
 			statement.setDate(3, Date.valueOf(aPatient.birthdate()));
-			statement.setInt(4, aPatient.doctorId().value());
+			if (aPatient.doctorId() == null) {
+				statement.setNull(4, java.sql.Types.NULL);
+			} else {
+				statement.setInt(4, aPatient.doctorId().value());
+			}
 			statement.setInt(5, aPatient.id().value());
 			
 			statement.execute();
@@ -106,7 +113,14 @@ public class MySQLPatientRepository implements PatientRepository {
 		PatientFullName f = new PatientFullName(result.getString(2), result.getString(3));
 		LocalDate birth = result.getDate(4).toLocalDate();
 		UserId respon = new UserId(result.getInt(5));
-		UserId doctor = new UserId(result.getInt(6));
+		UserId doctor;
+		result.getInt(6);
+		
+		if (result.wasNull()) {
+			doctor = null;
+		} else {			
+			doctor = new UserId(result.getInt(6));
+		}
 		
 		return new Patient(i, f, birth, respon, doctor);
 	}
@@ -119,7 +133,9 @@ public class MySQLPatientRepository implements PatientRepository {
 		) {
 			statement.setInt(1, anId.value());
 			ResultSet result = statement.executeQuery();
-			result.next();
+			if(!result.next()) {
+				return null;
+			}
 			patient = buildPatient(result);
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
