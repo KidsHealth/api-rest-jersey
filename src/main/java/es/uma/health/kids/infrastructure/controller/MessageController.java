@@ -64,8 +64,8 @@ public class MessageController {
 	
 	@POST
 	@Path("/user/{userId}/patient/{patientId}/message")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response postOrdinaryMessage(
 			final SendMessageRequest request, 
 			@PathParam("patientId") final int patientId, 
@@ -79,8 +79,8 @@ public class MessageController {
 	
 	@POST
 	@Path("/user/{userId}/patient/{patientId}/appointmentRequest")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response postAppointmentRequest(
 			final ProposeAppointmentRequest request,
 			@PathParam("patientId") final int patientId,
@@ -94,8 +94,8 @@ public class MessageController {
 	
 	@PUT
 	@Path("/user/{userId}/appointmentRequest/{messageId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response updateAppointmentRequest(
 			final UpdateProposedAppointmentRequest request,
 			@PathParam("messageId") final int messageId,

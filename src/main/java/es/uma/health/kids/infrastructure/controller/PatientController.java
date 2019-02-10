@@ -72,7 +72,7 @@ public class PatientController {
 	
 	@GET
 	@Path("/user/{userId}/patient/{patientId}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public DetailedPatientDTO viewDetailedPatient(
 			@PathParam("patientId") final int patientId,
 			@PathParam("userId") final int userId) {
@@ -83,7 +83,7 @@ public class PatientController {
 
 	@GET
 	@Path("/user/{userId}/patient")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Collection<PatientDTO> viewPatients(
 			@PathParam("userId") final int userId) {
 		return new UserViewTheirPatients(userRepo, patientRepo, patientMapper)
@@ -92,8 +92,8 @@ public class PatientController {
 	
 	@POST
 	@Path("/user/{userId}/patient")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response addPatient(
 			final ResponsibleAddPatientRequest request,
 			@PathParam("userId") final int userId) {
@@ -104,8 +104,8 @@ public class PatientController {
 	
 	@PUT
 	@Path("/user/{userId}/patient/{patientId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response updatePatient(
 			final ResponsibleUpdatePatientRequest request,
 			@PathParam("userId") final int userId,
@@ -119,8 +119,8 @@ public class PatientController {
 	
 	@DELETE
 	@Path("/user/{userId}/patient/{patientId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response deletePatient(
 			@PathParam("userId") final int userId,
 			@PathParam("patientId") final int patientId) {
@@ -131,8 +131,8 @@ public class PatientController {
 	
 	@POST
 	@Path("/doctor/{userId}/patient/{patientId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doctorAssignNewPatient(
 			@PathParam("userId") final int doctorId,
 			@PathParam("patientId") final int patientId) {
@@ -143,8 +143,8 @@ public class PatientController {
 	
 	@DELETE
 	@Path("/doctor/{userId}/patient/{patientId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doctorUnassignAPatient(
 			@PathParam("userId") final int doctorId,
 			@PathParam("patientId") final int patientId) {
@@ -155,8 +155,8 @@ public class PatientController {
 	
 	@POST
 	@Path("/doctor/{userId}/patient/{patientId}/diagnosis")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doctorDiagnosePatient(
 			final DoctorDiagnosePatientRequest request,
 			@PathParam("userId") final int doctorId,
@@ -170,8 +170,8 @@ public class PatientController {
 	
 	@POST
 	@Path("/doctor/{userId}/diagnosis/{diseaseContractionId}/medication")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public Response doctorDiagnosePatient(
 			final DoctorAddTreatmentRequest request,
 			@PathParam("diseaseContractionId") final int diseaseContractionId,
